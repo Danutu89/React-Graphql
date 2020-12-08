@@ -9,14 +9,19 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
+import { reducer, sliceKey, appActions } from './global/slice';
 
-import { GlobalStyle } from '../styles/global-styles';
+import 'rsuite/dist/styles/rsuite-dark.css';
+import { GlobalStyle } from 'styles/global-styles';
 
-import { HomePage } from './containers/HomePage/Loadable';
-import { NotFoundPage } from './containers/NotFoundPage/Loadable';
+import { Home } from './containers/Home/Loadable';
+import { NotFoundPage } from './components/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
 
 export function App() {
+  useInjectReducer({ key: sliceKey, reducer });
+  //useInjectSaga({ key: sliceKey, saga: homeSaga });
   const { i18n } = useTranslation();
   return (
     <BrowserRouter>
@@ -29,7 +34,7 @@ export function App() {
       </Helmet>
 
       <Switch>
-        <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
+        <Route exact path="/" component={Home} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
